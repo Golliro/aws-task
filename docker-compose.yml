@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: aws-tasks-backend
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    # networks:
+    #   - easyrice-erms
+    volumes:
+      - .:/usr/src/app
+    extra_hosts:
+      - host.docker.internal:host-gateway
+# networks:
+#   easyrice-erms:
