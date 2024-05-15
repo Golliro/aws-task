@@ -1,58 +1,85 @@
 import { SearchKolDto } from './kol.dto';
-export const makeSearchQuery = (query: SearchKolDto) => {
+import { isUndefined, omitBy } from 'lodash';
+import { ScanCommandInput, QueryInput } from '@aws-sdk/client-dynamodb';
+export const makeSearchQuery = (
+  query: SearchKolDto,
+): ScanCommandInput | QueryInput => {
   try {
     const { name, platform, sex } = query;
+    console.log('query : ', query);
     const params = {
       TableName: 'Kol',
     };
-    let KeyConditionExpression = '';
-    const ExpressionAttributeNames = {};
-    const ExpressionAttributeValues = {};
-    let FilterExpression = '';
+    const KeyConditions = {};
+    const QueryFilter = {
+      status: {
+        ComparisonOperator: 'EQ',
+        AttributeValueList: [{ S: 'active' }],
+      },
+    };
     if (name) {
       params['IndexName'] = 'name-platform-index';
-      KeyConditionExpression = `#name = :name`;
-      ExpressionAttributeNames['#name'] = 'name';
-      ExpressionAttributeValues[':name'] = { S: name };
+      KeyConditions['name'] = {
+        ComparisonOperator: 'EQ',
+        AttributeValueList: [{ S: name }],
+      };
       if (platform) {
-        KeyConditionExpression = `${KeyConditionExpression} and #platform = :platform`;
-        ExpressionAttributeNames['#platform'] = 'platform';
-        ExpressionAttributeValues[':platform'] = { S: platform };
+        KeyConditions['platform'] = {
+          ComparisonOperator: 'EQ',
+          AttributeValueList: [{ S: platform }],
+        };
       }
       if (sex) {
-        FilterExpression = `#sex = :sex`;
-        ExpressionAttributeNames['#sex'] = 'sex';
-        ExpressionAttributeValues[':sex'] = { S: sex };
+        QueryFilter['sex'] = {
+          ComparisonOperator: 'EQ',
+          AttributeValueList: [{ S: sex }],
+        };
       }
     } else if (platform && sex) {
       params['IndexName'] = 'platform-followers-index';
-      KeyConditionExpression = `#platform = :platform`;
-      ExpressionAttributeNames['#platform'] = 'platform';
-      ExpressionAttributeValues[':platform'] = { S: platform };
-      FilterExpression = `#sex = :sex`;
-      ExpressionAttributeNames['#sex'] = 'sex';
-      ExpressionAttributeValues[':sex'] = { S: sex };
-    } else {
-      if (platform) {
-        params['IndexName'] = 'platform-index';
-        KeyConditionExpression = `#platform = :platform`;
-        ExpressionAttributeNames['#platform'] = 'platform';
-        ExpressionAttributeValues[':platform'] = { S: platform };
-      }
+      KeyConditions['platform'] = {
+        ComparisonOperator: 'EQ',
+        AttributeValueList: [{ S: platform }],
+      };
       if (sex) {
-        params['IndexName'] = 'sex-followers-index';
-        KeyConditionExpression = `#sex = :sex`;
-        ExpressionAttributeNames['#sex'] = 'sex';
-        ExpressionAttributeValues[':sex'] = { S: sex };
+        QueryFilter['sex'] = {
+          ComparisonOperator: 'EQ',
+          AttributeValueList: [{ S: sex }],
+        };
       }
+    } else if (platform) {
+      params['IndexName'] = 'platform-followers-index';
+      KeyConditions['platform'] = {
+        ComparisonOperator: 'EQ',
+        AttributeValueList: [{ S: platform }],
+      };
+    } else if (sex) {
+      params['IndexName'] = 'sex-followers-index';
+      KeyConditions['sex'] = {
+        ComparisonOperator: 'EQ',
+        AttributeValueList: [{ S: sex }],
+      };
+    } else {
+      return {
+        ...params,
+        ScanFilter: {
+          status: {
+            ComparisonOperator: 'EQ',
+            AttributeValueList: [{ S: 'active' }],
+          },
+        },
+      } as ScanCommandInput;
     }
-    return {
-      ...params,
-      KeyConditionExpression,
-      ExpressionAttributeNames,
-      ExpressionAttributeValues,
-      FilterExpression,
-    };
+
+    const omitUndefiend = omitBy(
+      {
+        ...params,
+        KeyConditions,
+        QueryFilter,
+      },
+      isUndefined,
+    );
+    return omitUndefiend as QueryInput;
   } catch (error) {
     throw error;
   }
