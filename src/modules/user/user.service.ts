@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CognitoService } from '@modules/cognito/cognito.service';
 import {
   SignInDto,
@@ -13,24 +13,52 @@ import {
 export class UserService {
   constructor(private cognitoService: CognitoService) {}
   async userSignIn(body: SignInDto) {
-    return await this.cognitoService.signInCommand(body);
+    try {
+      return await this.cognitoService.signInCommand(body);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
   async createUser(body: UserCreateDto) {
-    return await this.cognitoService.signUpCommand(body);
+    try {
+      return await this.cognitoService.signUpCommand(body);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
   async confirmUser(body: UserConfirmSignUpDto) {
-    return await this.cognitoService.confirmSignUpCommand(body);
+    try {
+      return await this.cognitoService.confirmSignUpCommand(body);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
   async resendComfirmCode(body: UserResendConfirmSignUpDto) {
-    return await this.cognitoService.resendConfirmationCodeCommand(body);
+    try {
+      return await this.cognitoService.resendConfirmationCodeCommand(body);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
   async forgotUserPassword(body: UserForgotPasswordDto) {
-    return await this.cognitoService.forgotPasswordCommand(body);
+    try {
+      return await this.cognitoService.forgotPasswordCommand(body);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
   async confirmForgotUserPassowrd(body: UserConfirmForgotPasswordDto) {
-    return await this.cognitoService.confirmForgotPasswordCommand(body);
+    try {
+      return await this.cognitoService.confirmForgotPasswordCommand(body);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
   async changeUserPassword(body: UserChangePasswordDto) {
-    return await this.cognitoService.changePasswordCommand(body);
+    try {
+      return await this.cognitoService.changePasswordCommand(body);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }

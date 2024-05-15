@@ -11,14 +11,14 @@ export class CognitoCreateDto {
 }
 export class CognitoConfirmSignUpDto {
   @ApiProperty()
-  email: string;
+  username: string;
 
   @ApiProperty()
   confirmationCode: string;
 }
 export class CognitoResendConfirmSignUpDto {
   @ApiProperty()
-  email: string;
+  username: string;
 }
 export class CognitoChangePasswordDto {
   @ApiProperty()
@@ -41,10 +41,8 @@ export class CognitoConfirmForgotPasswordDto {
   confirmationCode: string;
   @ApiProperty()
   newPassword: string;
-  @ApiProperty()
-  email: string;
 }
 export class CognitoForgotPasswordDto {
   @ApiProperty()
-  email: string;
+  username: string;
 }

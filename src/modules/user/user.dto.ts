@@ -11,14 +11,14 @@ export class UserCreateDto {
 }
 export class UserConfirmSignUpDto {
   @ApiProperty()
-  email: string;
+  username: string;
 
   @ApiProperty()
   confirmationCode: string;
 }
 export class UserResendConfirmSignUpDto {
   @ApiProperty()
-  email: string;
+  username: string;
 }
 export class UserChangePasswordDto {
   @ApiProperty()
@@ -42,10 +42,8 @@ export class UserConfirmForgotPasswordDto {
   confirmationCode: string;
   @ApiProperty()
   newPassword: string;
-  @ApiProperty()
-  email: string;
 }
 export class UserForgotPasswordDto {
   @ApiProperty()
-  email: string;
+  username: string;
 }
