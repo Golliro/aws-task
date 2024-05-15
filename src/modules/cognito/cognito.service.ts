@@ -108,15 +108,24 @@ export class CognitoService {
 
   // confirm forgot password
   async confirmForgotPasswordCommand(data: CognitoConfirmForgotPasswordDto) {
-    const { email, confirmationCode, newPassword } = data;
+    const { username, confirmationCode, newPassword } = data;
     const params: ConfirmForgotPasswordCommandInput = {
       ClientId: process.env.COGNITO_CLIENT_ID,
-      Username: email,
+      Username: username,
       ConfirmationCode: confirmationCode,
       Password: newPassword,
     };
-
-    return await CognitoClient.send(new ConfirmForgotPasswordCommand(params));
+    try {
+      return await CognitoClient.send(new ConfirmForgotPasswordCommand(params));
+    } catch (error) {
+      console.log(error);
+      if (error?.name === 'InvalidPasswordException') {
+        throw new Error(
+          'Password must have uppercase, lowercase, number, special character and minimum 12 characters.',
+        );
+      }
+      throw error;
+    }
   }
 
   // change password using accessToken

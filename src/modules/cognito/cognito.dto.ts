@@ -41,8 +41,6 @@ export class CognitoConfirmForgotPasswordDto {
   confirmationCode: string;
   @ApiProperty()
   newPassword: string;
-  @ApiProperty()
-  email: string;
 }
 export class CognitoForgotPasswordDto {
   @ApiProperty()

@@ -31,7 +31,13 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.3.1",
     "@types/lodash": "^4.17.1",
+    "@types/uuid": "^9.0.8",
+    "amazon-cognito-identity-js": "^6.3.12",
+    "class-validator": "^0.14.1",
+    "jwks-rsa": "^3.1.0",
     "lodash": "^4.17.21",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "uuid": "^9.0.1"
