@@ -25,7 +25,7 @@ export class CreateKolDto {
   @ApiProperty()
   link: string;
   @ApiProperty()
-  followers: string;
+  followers: number;
   @ApiProperty()
   'photo_cost_kols': number;
   @ApiProperty()
@@ -50,7 +50,7 @@ export class UpdateKolDto {
   @ApiProperty()
   link?: string;
   @ApiProperty()
-  followers?: string;
+  followers?: number;
   @ApiProperty()
   'photo_cost_kols'?: number;
   @ApiProperty()

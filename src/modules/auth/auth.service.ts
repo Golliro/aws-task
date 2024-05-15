@@ -12,8 +12,10 @@ export class AuthService {
   constructor(private configService: ConfigService) {}
   private async login(authLoginUserDto: LoginDto) {
     const poolData = {
-      UserPoolId: this.configService.get<string>('COGNITO_USER_POOL_ID'),
-      ClientId: this.configService.get<string>('COGNITO_CLIENT_ID'),
+      UserPoolId: process.env.COGNITO_USER_POOL_ID,
+      // this.configService.get<string>('COGNITO_USER_POOL_ID'),
+      ClientId: process.env.COGNITO_CLIENT_ID,
+      // this.configService.get<string>('COGNITO_CLIENT_ID'),
     };
     const userPool = new CognitoUserPool(poolData);
 
