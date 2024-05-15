@@ -46,6 +46,10 @@ export class CognitoService {
           Name: 'email',
           Value: email,
         },
+        {
+          Name: 'preferred_username',
+          Value: username,
+        },
       ],
     };
 
@@ -70,10 +74,10 @@ export class CognitoService {
 
   // Confirm signup command
   async confirmSignUpCommand(data: CognitoConfirmSignUpDto) {
-    const { email, confirmationCode } = data;
+    const { username, confirmationCode } = data;
     const params: ConfirmSignUpCommandInput = {
       ClientId: process.env.COGNITO_CLIENT_ID,
-      Username: email,
+      Username: username,
       ConfirmationCode: confirmationCode,
     };
 
@@ -82,10 +86,10 @@ export class CognitoService {
 
   // resend confirmation code
   async resendConfirmationCodeCommand(data: CognitoResendConfirmSignUpDto) {
-    const { email } = data;
+    const { username } = data;
     const params: ResendConfirmationCodeCommandInput = {
       ClientId: process.env.COGNITO_CLIENT_ID,
-      Username: email,
+      Username: username,
     };
 
     return await CognitoClient.send(new ResendConfirmationCodeCommand(params));
@@ -93,10 +97,10 @@ export class CognitoService {
 
   // forgot Passowrd
   async forgotPasswordCommand(data: CognitoForgotPasswordDto) {
-    const { email } = data;
+    const { username } = data;
     const params: ForgotPasswordCommandInput = {
       ClientId: process.env.COGNITO_CLIENT_ID,
-      Username: email,
+      Username: username,
     };
 
     return await CognitoClient.send(new ForgotPasswordCommand(params));
